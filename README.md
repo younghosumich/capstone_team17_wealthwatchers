@@ -10,4 +10,9 @@ Requirements
 * numpy
 * yfinance
 * matplotlib
-* 
+* StandardScaler
+* Sklearn
+* Scipy
+* PCA
+* cdist
+
