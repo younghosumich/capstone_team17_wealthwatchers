@@ -7,5 +7,7 @@ Requirements
 
 * Python 3.x
 * pandas
+* numpy
 * yfinance
+* matplotlib
 * 
