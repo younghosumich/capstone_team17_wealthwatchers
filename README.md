@@ -18,3 +18,6 @@ Requirements
 * PCA
 * cdist
 
+## First Jupyter notebook - Stock Selection 
+
+This notebook fetches historical stock data from Yahoo Finance, calculates
