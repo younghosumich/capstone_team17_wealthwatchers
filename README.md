@@ -1,6 +1,8 @@
-Stock Selction 
+# Stock Selection 
 
-This Jupyter notebook contains two sections. Stock selection and ..... designed to perform the clustering analysis
+## Overview
+
+This Jupyter notebook contains two sections. Stock selection and ..... designed to perform the clustering analysis to group of stocks from the S&P 500 to optimize a diversified portfolio. The process includes downloading historical stock data, performing data preprocessing, and applying unsupervised learning techniques to cluster the stocks based on their performance metrics.
 
 
 Requirements
