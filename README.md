@@ -20,7 +20,7 @@ Requirements
 
 ## First Jupyter notebook - Stock Selection 
 
-The first Jupyter note is designed to perform the clustering analysis to group of stocks from the S&P 500 to optimize a diversified portfolio. The process includes fetching historical stock data from Yahoo Finance, performing data preprocessing to calculates .......
+The first Jupyter note demonstrates a clustering of the S&P 500 stocks data, based on a stock price and volatility. The process includes fetching historical stock data from Yahoo Finance, performing data preprocessing to calculates .......
 , and applying unsupervised learning techniques to cluster the stocks based on their performance metrics.
 
 
