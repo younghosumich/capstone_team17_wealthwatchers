@@ -12,17 +12,23 @@ Requirements
 # libraries to retrieve stock data
 import yfinance as yf
 
-#
+# Numpy and Pandas for data manipulation
+import pandas as pd
+import numpy as np
 
-* pandas
-* numpy
+# Plotting and Visualization
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
 
-* matplotlib
-* StandardScaler
-* Sklearn
-* Scipy
-* PCA
-* cdist
+# sklearn for PCA,kmeans and model metrics
+from sklearn.preprocessing import StandardScaler
+from sklearn.decomposition import PCA
+from sklearn.metrics import silhouette_score
+from sklearn.metrics import silhouette_samples
+
+# scipy for Euclidean distance
+from scipy.spatial.distance import cdist
+
 ```
 
 ## First Jupyter notebook - Stock Selection 
