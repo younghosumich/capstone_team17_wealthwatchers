@@ -54,11 +54,16 @@ excluded_tickers = {'SW', 'ENPH','ABNB','CARR','CEG','CRWD',
                     'HWM','INVH','IR','KHC','KVUE','LW','MRNA',
                     'OTIS','ORVO','SOLV','UBER','VICI','VLTO','VST'}
 
-# Get the list of the ticker names after filter out stocks with less than ten years of trading history
+# iterate over the list of ticker names after filter out stocks with less than ten years of trading history and extract the individual tickers
 valid_tickers = []
 for ticker in tickers:
     if ticker not in excluded_tickers:
         valid_tickers.append(ticker)
+```
+
+```python
+# Select Yahoo Finance data to retrieve
+data = yf.download(valid_tickers, start="2008-07-01", end="2024-07-01")['Adj Close']
 
 ```
 
