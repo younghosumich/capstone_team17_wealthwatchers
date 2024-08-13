@@ -7,6 +7,7 @@ This Jupyter notebook contains two sections. Stock selection and .....
 
 Requirements
 
+```python
 * Python 3.x
 * pandas
 * numpy
@@ -24,7 +25,7 @@ The first Jupyter notebook demonstrates a clustering of the S&P 500 stocks data,
 
 ## Data Collection:
 
-Fetching Historical Stock Data: The notebook retrieves historical stock price data for S&P 500 companies from Yahoo Finance using the yfinance library. The data spans from July 2008 to July 2024, allowing the analysis to cover significant financial events such as the Global Financial Crisis, the European Debt Crisis, and the COVID-19 pandemic.
+Fetching Historical Stock Data: The notebook retrieves historical stock price data for S&P 500 companies from Yahoo Finance using the yfinance library. The data consists of 472 companies (excluded 34 companies that with less than ten years of trading history) and time range from July 2008 to July 2024, allowing the analysis to cover significant financial events such as the Global Financial Crisis, the European Debt Crisis, and the COVID-19 pandemic.
 
 ## Data Preprocessing:
 
