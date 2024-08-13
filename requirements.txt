@@ -1,0 +1,14 @@
+yfinance
+pandas
+numpy
+matplotlib.pyplot
+matplotlib.cm
+StandardScaler
+PCA
+cdist
+silhouette_score
+silhouette_samples
+sklearn.preprocessing
+sklearn.decomposition
+scipy.spatial.distance
+sklearn.metrics
