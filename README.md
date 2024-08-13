@@ -64,7 +64,6 @@ for ticker in tickers:
 ```python
 # Select Yahoo Finance data to retrieve
 data = yf.download(valid_tickers, start="2008-07-01", end="2024-07-01")['Adj Close']
-
 ```
 
 
@@ -72,7 +71,15 @@ data = yf.download(valid_tickers, start="2008-07-01", end="2024-07-01")['Adj Clo
 
 Handling Missing Data: Missing data points are filled using forward and backward filling methods to ensure continuity in the time series data.
 
+```python
+# Forward fill and Backward fill the NaN data
+data.fillna(method='ffill', inplace=True)  
+data.fillna(method='bfill', inplace=True)  
+```
+
 Calculation of Financial Metrics: The notebook calculates key financial metrics such as daily returns, quarterly returns, and quarterly volatility. These metrics are essential for understanding the performance and risk profile of each stock.
+
+
 
 ## Clustering Analysis:
 
