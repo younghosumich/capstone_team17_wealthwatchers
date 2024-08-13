@@ -6,18 +6,24 @@ This Jupyter notebook contains two sections. Stock selection and .....
 
 
 Requirements
-
-```python
 * Python 3.x
+  
+```python
+# libraries to retrieve stock data
+import yfinance as yf
+
+#
+
 * pandas
 * numpy
-* yfinance
+
 * matplotlib
 * StandardScaler
 * Sklearn
 * Scipy
 * PCA
 * cdist
+```
 
 ## First Jupyter notebook - Stock Selection 
 
