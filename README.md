@@ -37,7 +37,31 @@ The first Jupyter notebook demonstrates a clustering of the S&P 500 stocks data,
 
 ## Data Collection:
 
-Fetching Historical Stock Data: The notebook retrieves historical stock price data for S&P 500 companies from Yahoo Finance using the yfinance library. The data consists of 472 companies (excluded 34 companies that with less than ten years of trading history) and time range from July 2008 to July 2024, allowing the analysis to cover significant financial events such as the Global Financial Crisis, the European Debt Crisis, and the COVID-19 pandemic.
+Fetching Historical Stock Data: The notebook retrieves historical stock price data for S&P 500 companies from Yahoo Finance using the yfinance library. The data consists of 472 companies (excluded 34 companies with less than ten years of trading history) and time range is from July 2008 to July 2024, which allowing this analysis to cover significant financial events such as the Global Financial Crisis, the European Debt Crisis, and the COVID-19 pandemic.
+
+```python
+# URL to get S&P tickers from
+tickers = pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')[0]
+tickers = tickers['Symbol'].tolist()
+
+# Replace . with - to meet Yahoo Finance ticker's format
+tickers = [ticker.replace('.', '-') for ticker in tickers]
+
+# Identidy and filter out stocks with less than ten years of trading history
+excluded_tickers = {'SW', 'ENPH','ABNB','CARR','CEG','CRWD',
+                    'CTVA','DAY','DOW','ETSY','FOX','FOXA',
+                    'FTV','GDDY','GEHC','GEV','HLT','HPE',
+                    'HWM','INVH','IR','KHC','KVUE','LW','MRNA',
+                    'OTIS','ORVO','SOLV','UBER','VICI','VLTO','VST'}
+
+# Get the list of the ticker names after filter out stocks with less than ten years of trading history
+valid_tickers = []
+for ticker in tickers:
+    if ticker not in excluded_tickers:
+        valid_tickers.append(ticker)
+
+```
+
 
 ## Data Preprocessing:
 
