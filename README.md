@@ -79,6 +79,12 @@ data.fillna(method='bfill', inplace=True)
 
 Calculation of Financial Metrics: The notebook calculates key financial metrics such as daily returns, quarterly returns, and quarterly volatility. These metrics are essential for understanding the performance and risk profile of each stock.
 
+```python
+#take quarterly average of daily data
+daily_return = data.pct_change()
+quarterly_return = data.resample('Q').ffill().pct_change()
+quarterly_volatility = daily_return.resample('Q').std() * np.sqrt(200)
+```
 
 
 ## Clustering Analysis:
