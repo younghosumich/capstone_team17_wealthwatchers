@@ -186,4 +186,65 @@ reduced_data, reduced_labels, valid_indices = reduce_outliers(pca_components, km
 reduced_tickers = features.index[valid_indices]
 ```
 
+```python
+# Read the S&P 500 companies list from Wikipedia
+tickers_df = pd.read_html('https://en.wikipedia.org/wiki/List_of_S%26P_500_companies')[0]
+
+# Extract the 'Symbol' and 'GICS Sector' columns
+tickers_df['Symbol'] = tickers_df['Symbol'].str.replace('.', '-')  # Replace '.' with '-' for Yahoo Finance format
+tickers_df = tickers_df[['Symbol', 'GICS Sector']]
+
+
+#create dictionary to include ticker name, cluster number.
+ticker_cluster_df = pd.DataFrame({
+    'Ticker': reduced_tickers,
+    'Cluster': reduced_labels
+})
+
+# Consolidate the industry information
+consolidated_df = pd.merge(ticker_cluster_df, tickers_df, how='left', left_on='Ticker', right_on='Symbol')
+
+# Select the columns
+tickers_clusters_df = consolidated_df[['Ticker', 'Cluster', 'GICS Sector']]
+#rename columns
+tickers_clusters_df.rename(columns={'GICS Sector': 'Industry'}, inplace=True)
+```
+
+```python
+# Calculate the average return for each stock
+average_return = quarterly_return.mean(axis=1).reset_index()
+average_return.columns = ['Ticker', 'Average Return']
+
+# Calculate the average return and volatility for each stock
+average_return = quarterly_return.mean(axis=1).reset_index()
+average_return.columns = ['Ticker', 'Average Return']
+average_volatility = quarterly_volatility.mean(axis=1).reset_index()
+average_volatility.columns = ['Ticker', 'Average Volatility']
+
+# Merge the average returns and volatility with the cluster information
+consolidated_df = pd.merge(tickers_clusters_df, average_return, on='Ticker')
+consolidated_df = pd.merge(consolidated_df, average_volatility, on='Ticker')
+```
+
+```python
+# Normalized the Data
+def normalize(x):
+    return (x - x.min()) / (x.max() - x.min())
+```
+
+```python
+consolidated_df['Normalized Return'] = consolidated_df.groupby('Cluster')['Average Return'].transform(normalize)
+consolidated_df['Normalized Volatility'] = consolidated_df.groupby('Cluster')['Average Volatility'].transform(lambda x: (x.max() - x) / (x.max() - x.min()))
+
+# Combine the normalized scores
+consolidated_df['Combined Score'] = consolidated_df['Normalized Return'] + consolidated_df['Normalized Volatility']
+```
+
+```python
+# Select the top five stocks for each cluster based on the combined score
+top_stocks_per_cluster_normalized = consolidated_df.groupby('Cluster').apply(lambda x: x.nlargest(5, 'Combined Score')).reset_index(drop=True)
+top_stocks_per_cluster_normalized = top_stocks_per_cluster_normalized[['Cluster', 'Ticker', 'Industry', 'Average Return', 'Average Volatility', 'Normalized Return', 'Normalized Volatility', 'Combined Score']]
+top_stocks_per_cluster_normalized
+```
+
 ## Visualization:
