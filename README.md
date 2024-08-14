@@ -118,4 +118,42 @@ features = features.loc[~features.index.isin(excluded_tickers)]
 
 3. Evaluation of Clusters: The quality of the clusters is evaluated using metrics like the silhouette score, which measures how well each stock fits within its cluster.
 
+``python
+# Forward fill and Backward fill the NaN data
+data.fillna(method='ffill', inplace=True)  
+data.fillna(method='bfill', inplace=True)  
+```
+
+```python
+#take quarterly average of daily data
+daily_return = data.pct_change()
+quarterly_return = data.resample('Q').ffill().pct_change()
+quarterly_volatility = daily_return.resample('Q').std() * np.sqrt(200)
+```
+
+```python
+# Forward fill and Backward fill the NaN data for quarterly return and quarterly_volatility
+quarterly_return.fillna(method='ffill', inplace=True)
+quarterly_return.fillna(method='bfill', inplace=True)
+quarterly_volatility.fillna(method='ffill', inplace=True)
+quarterly_volatility.fillna(method='bfill', inplace=True)
+# Remove the first row from returns and volatility since it is NaN
+quarterly_return = quarterly_return.iloc[1:]
+quarterly_volatility = quarterly_volatility.iloc[1:]
+```
+
+```python
+# Transpose the DataFrames
+quarterly_return = quarterly_return.transpose()
+quarterly_volatility = quarterly_volatility.transpose()
+```
+
+```python
+# Combine returns and volatility into one DataFrame
+features = pd.concat([quarterly_return, quarterly_volatility], axis=1, keys=['Returns', 'Volatility'])
+# Remove the excluded tickers from the features DataFrame
+features = features.loc[~features.index.isin(excluded_tickers)]
+```
+
+
 ## Visualization:
