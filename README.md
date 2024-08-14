@@ -248,3 +248,69 @@ top_stocks_per_cluster_normalized
 ```
 
 ## Visualization:
+
+1. Visualizing Clusters: Each cluster is represented with ticker symbols for each stock. The use of distinct markers and colors helps in identifying the clusters' distribution across the two principal components.
+2. Evaluation of Clusters: The quality of the clusters was evaluated using a silhouette plot, which measures how well each stock fits within its cluster.
+
+```python
+# Plot the clusters after outlier reduction
+markers = ['P','o', 's', '^', 'H', 'X', '*']
+colors = ['b', 'g', 'r', 'c', 'm', 'y', 'k']
+
+plt.figure(figsize=(20, 20))
+for cluster_label in np.unique(reduced_labels):
+    cluster_indices = np.where(reduced_labels == cluster_label)
+    plt.scatter(reduced_data[cluster_indices, 0], reduced_data[cluster_indices, 1], 
+                marker=markers[cluster_label], color=colors[cluster_label], s=100, lw=0, alpha=0.7, edgecolor='k', label=f'Cluster {cluster_label}')
+
+# Add the ticker symbol
+for i, ticker in enumerate(reduced_tickers):
+    plt.annotate(ticker, (reduced_data[i, 0], reduced_data[i, 1]), fontsize=10, alpha=0.8)
+
+plt.title('PCA of S&P 500 Stocks with 7 Clusters')
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.legend()
+plt.show()
+```
+
+```python
+# https://scikit-learn.org/stable/auto_examples/cluster/plot_kmeans_silhouette_analysis.html
+# Below code from scikit documentation
+
+silhouette_avg = silhouette_score(reduced_data, reduced_labels)
+fig, ax1 = plt.subplots(1, 1, figsize=(14, 10))
+
+# The silhouette coefficient can range from -1, 1 but in this example, all the coefficients are positive
+ax1.set_xlim([-0.1, 1])
+ax1.set_ylim([0, len(reduced_data) + (7 + 1) * 10])
+
+# Compute the silhouette scores for each sample
+silhouette_values = silhouette_samples(reduced_data, reduced_labels)
+
+y_lower = 10
+for i in range(7):
+    ith_cluster_silhouette_values = silhouette_values[reduced_labels == i]
+    ith_cluster_silhouette_values.sort()
+
+    size_cluster_i = ith_cluster_silhouette_values.shape[0]
+    y_upper = y_lower + size_cluster_i
+
+    color = colors[i]
+    ax1.fill_betweenx(np.arange(y_lower, y_upper), 0, ith_cluster_silhouette_values, facecolor=color, edgecolor=color, alpha=0.7)
+    ax1.text(-0.05, y_lower + 0.5 * size_cluster_i, str(i))
+
+    y_lower = y_upper + 10  # 10 for the 0 samples
+
+ax1.set_title("The silhouette plot for the various clusters.")
+ax1.set_xlabel("The silhouette coefficient values")
+ax1.set_ylabel("Cluster label")
+
+# The vertical line for average silhouette score of all the values
+ax1.axvline(x=silhouette_avg, color="red", linestyle="--")
+
+ax1.set_yticks([])  # Clear the yaxis labels / ticks
+ax1.set_xticks(np.arange(-0.1, 1.1, 0.2))
+
+plt.show()
+```
