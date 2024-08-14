@@ -71,6 +71,7 @@ data = yf.download(valid_tickers, start="2008-07-01", end="2024-07-01")['Adj Clo
 
 1. Handling Missing Data: Missing data points are filled using forward and backward filling methods to ensure continuity in the time series data.
 2. Calculation of Financial Metrics: The notebook calculates key financial metrics such as daily returns, quarterly returns, and quarterly volatility. These metrics are essential for understanding the performance and risk profile of each stock.
+3. Data Transformation and Preparation: The financial metrics are cleaned by removing NaN values, transposed the data with tickers as the index, and  companies with less than ten years of trading history are excluded from the dataset for further analysis.
 
 ```python
 # Forward fill and Backward fill the NaN data
