@@ -116,7 +116,7 @@ features = features.loc[~features.index.isin(excluded_tickers)]
 
 2. Unsupervised Learning: The notebook applies clustering algorithms (e.g., K-Means) to group stocks based on their calculated financial metrics (e.g., returns and volatility). This helps in identifying patterns and categorizing stocks with similar performance profiles.
 
-3. Evaluation of Clusters: The quality of the clusters is evaluated using metrics like the silhouette score, which measures how well each stock fits within its cluster.
+3. Outlier Reduction: Outliers within the clusters are identified and removed using a threshold-based method. This process calculates pairwise distances within each cluster, determines a threshold based on the maximum and minimum distances, and removes data points that exceed this threshold, ensuring the remaining clusters are more accurate and representative of the underlying data.
 
 ```python
 # Standardize the features data
@@ -184,4 +184,5 @@ reduced_data, reduced_labels, valid_indices = reduce_outliers(pca_components, km
 # Get the list of tickers of the reduced data
 reduced_tickers = features.index[valid_indices]
 ```
+
 ## Visualization:
