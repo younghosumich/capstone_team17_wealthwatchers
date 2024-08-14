@@ -69,15 +69,14 @@ data = yf.download(valid_tickers, start="2008-07-01", end="2024-07-01")['Adj Clo
 
 ## Data Preprocessing:
 
-Handling Missing Data: Missing data points are filled using forward and backward filling methods to ensure continuity in the time series data.
+1. Handling Missing Data: Missing data points are filled using forward and backward filling methods to ensure continuity in the time series data.
+2. Calculation of Financial Metrics: The notebook calculates key financial metrics such as daily returns, quarterly returns, and quarterly volatility. These metrics are essential for understanding the performance and risk profile of each stock.
 
 ```python
 # Forward fill and Backward fill the NaN data
 data.fillna(method='ffill', inplace=True)  
 data.fillna(method='bfill', inplace=True)  
 ```
-
-Calculation of Financial Metrics: The notebook calculates key financial metrics such as daily returns, quarterly returns, and quarterly volatility. These metrics are essential for understanding the performance and risk profile of each stock.
 
 ```python
 #take quarterly average of daily data
@@ -86,6 +85,29 @@ quarterly_return = data.resample('Q').ffill().pct_change()
 quarterly_volatility = daily_return.resample('Q').std() * np.sqrt(200)
 ```
 
+```python
+# Forward fill and Backward fill the NaN data for quarterly return and quarterly_volatility
+quarterly_return.fillna(method='ffill', inplace=True)
+quarterly_return.fillna(method='bfill', inplace=True)
+quarterly_volatility.fillna(method='ffill', inplace=True)
+quarterly_volatility.fillna(method='bfill', inplace=True)
+# Remove the first row from returns and volatility since it is NaN
+quarterly_return = quarterly_return.iloc[1:]
+quarterly_volatility = quarterly_volatility.iloc[1:]
+```
+
+```python
+# Transpose the DataFrames
+quarterly_return = quarterly_return.transpose()
+quarterly_volatility = quarterly_volatility.transpose()
+```
+
+```python
+# Combine returns and volatility into one DataFrame
+features = pd.concat([quarterly_return, quarterly_volatility], axis=1, keys=['Returns', 'Volatility'])
+# Remove the excluded tickers from the features DataFrame
+features = features.loc[~features.index.isin(excluded_tickers)]
+```
 
 ## Clustering Analysis:
 
