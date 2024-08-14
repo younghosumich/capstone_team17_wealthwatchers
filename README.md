@@ -118,42 +118,70 @@ features = features.loc[~features.index.isin(excluded_tickers)]
 
 3. Evaluation of Clusters: The quality of the clusters is evaluated using metrics like the silhouette score, which measures how well each stock fits within its cluster.
 
-``python
-# Forward fill and Backward fill the NaN data
-data.fillna(method='ffill', inplace=True)  
-data.fillna(method='bfill', inplace=True)  
+```python
+# Standardize the features data
+scaler = StandardScaler()
+scaled_data = scaler.fit_transform(features)
+# Apply PCA
+pca = PCA(n_components=2)
+pca_components = pca.fit_transform(scaled_data)
 ```
 
 ```python
-#take quarterly average of daily data
-daily_return = data.pct_change()
-quarterly_return = data.resample('Q').ffill().pct_change()
-quarterly_volatility = daily_return.resample('Q').std() * np.sqrt(200)
+# Apply K-mean
+# K-means will produce different clusters for different initializations of the cluster centers
+# Run k-means with multiple (random) initializations of clusters centers. Take the clustering with the lowest loss
+n_init = 100 
+kmeans = KMeans(n_clusters=7, n_init=n_init, random_state=26)
+kmeans.fit_predict(pca_components)
+kmeans_labels = kmeans.labels_
 ```
 
 ```python
-# Forward fill and Backward fill the NaN data for quarterly return and quarterly_volatility
-quarterly_return.fillna(method='ffill', inplace=True)
-quarterly_return.fillna(method='bfill', inplace=True)
-quarterly_volatility.fillna(method='ffill', inplace=True)
-quarterly_volatility.fillna(method='bfill', inplace=True)
-# Remove the first row from returns and volatility since it is NaN
-quarterly_return = quarterly_return.iloc[1:]
-quarterly_volatility = quarterly_volatility.iloc[1:]
+# Compute pairwise distances within a cluster
+def compute_pairwise_distances(data):
+    return cdist(data, data, 'euclidean')
+
+# Reduce outliers based on the threshold using pairwise distance (max + min)/2, and then using that to calculate the Euclidean distance of all the data and removing any data that exceeds the threshold
+def reduce_outliers(data, labels, threshold_factor=1):
+    new_data = []
+    new_labels = []
+    valid_indices = []
+
+    # Loop over each cluster
+    for cluster_label in np.unique(labels):
+        cluster_indices = np.where(labels == cluster_label)[0]
+        cluster_data = data[cluster_indices]
+        # No outlier if a cluster has 1 or fewer data points
+        if len(cluster_data) <= 2:
+            new_data.append(cluster_data)
+            new_labels.extend([cluster_label] * len(cluster_data))
+            valid_indices.extend(cluster_indices)
+        else:
+            # Compute the threshold for outlier detection
+            pairwise_distances = compute_pairwise_distances(cluster_data)
+            max_distance = np.max(pairwise_distances)
+            min_distance = np.min(pairwise_distances)
+            threshold = threshold_factor * (max_distance + min_distance) / 2
+            # Compute the distances from the centroid
+            centroid = np.mean(cluster_data, axis=0)
+            distances_from_centroid = np.linalg.norm(cluster_data - centroid, axis=1)
+
+            # Keep the non-outlier data
+            for i, distance in enumerate(distances_from_centroid):
+                if distance <= threshold:
+                    new_data.append(cluster_data[i])
+                    new_labels.append(cluster_label)
+                    valid_indices.append(cluster_indices[i])
+
+    return np.array(new_data), np.array(new_labels), valid_indices
 ```
 
 ```python
-# Transpose the DataFrames
-quarterly_return = quarterly_return.transpose()
-quarterly_volatility = quarterly_volatility.transpose()
+# Reduce outliers for cluster data
+reduced_data, reduced_labels, valid_indices = reduce_outliers(pca_components, kmeans_labels, threshold_factor=1)
+
+# Get the list of tickers of the reduced data
+reduced_tickers = features.index[valid_indices]
 ```
-
-```python
-# Combine returns and volatility into one DataFrame
-features = pd.concat([quarterly_return, quarterly_volatility], axis=1, keys=['Returns', 'Volatility'])
-# Remove the excluded tickers from the features DataFrame
-features = features.loc[~features.index.isin(excluded_tickers)]
-```
-
-
 ## Visualization:
