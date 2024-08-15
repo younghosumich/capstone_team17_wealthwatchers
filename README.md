@@ -33,6 +33,6 @@ pip install -r requirements.txt
 
 # Authors
 Paul R. Boothroyd III,
-Wnexiong Ye,
+Wenxiong Ye,
 Youngho Shin,
 Yeonjae Choo
