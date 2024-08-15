@@ -71,7 +71,7 @@ data = yf.download(valid_tickers, start="2008-07-01", end="2024-07-01")['Adj Clo
 
 1. Handling Missing Data: Missing data points are filled using forward and backward filling methods to ensure continuity in the time series data.
 2. Calculation of Financial Metrics: The notebook calculates key financial metrics such as daily returns, quarterly returns, and quarterly volatility. These metrics are essential for understanding the performance and risk profile of each stock.
-3. Data Transformation and Preparation: The financial metrics are cleaned by removing NaN values, transposed the data with tickers as the index, combining the financial metrics into a single DataFrame, and the companies with less than ten years of trading history are excluded from this single DataFrame for further analysis.
+3. Data Transformation and Preparation: The financial metrics are cleaned by removing NaN values, transposed the data with tickers as the index, combining the financial metrics into a single DataFrame, and the companies with less than ten years of trading history are excluded from this dataset for further analysis.
 
 ```python
 # Forward fill and Backward fill the NaN data
@@ -112,12 +112,12 @@ features = features.loc[~features.index.isin(excluded_tickers)]
 
 ## Clustering Analysis:
 
-1. Dimensionality Reduction: Techniques such as Principal Component Analysis (PCA) are used to reduce the dimensionality of the data, making the clustering process more efficient and interpretable.
+1. Dimensionality Reduction: Principal Component Analysis (PCA) are used to reduce the dimensionality of the data, making the clustering process more efficient and interpretable.
 
-2. Unsupervised Learning: The notebook applies clustering algorithms (e.g., K-Means) to group stocks based on their calculated financial metrics (e.g., returns and volatility). This helps in identifying patterns and categorizing stocks with similar performance profiles.
+2. Unsupervised Learning: The notebook applies clustering algorithms (K-Means) to group stocks based on their calculated financial metrics (quartely returns and volatility). This helps in identifying patterns and categorizing stocks with similar performance profiles.
 
 3. Outlier Reduction: Outliers within the clusters are identified and removed using a threshold-based method. This process calculates pairwise distances within each cluster, determines a threshold based on the maximum and minimum distances, and removes data points that exceed this threshold, ensuring the remaining clusters are more accurate and representative of the underlying data.
-4. Stock Selection from Clusters: Within each cluster, returns and volatility are normalized, and a combined score is calculated by summing the normalized return and inverse-normalized volatility. The top five stocks from each cluster are selected based on this combined score, resulting in a curated list of stocks that balances performance and risk across clusters. Industry information is also added into the list.
+4. Stock Selection from Clusters: Within each cluster, returns and volatilities are normalized, and a combined score is calculated by summing the normalized return and inverse-normalized volatilities. The top five stocks from each cluster are selected based on their combined score, which resulting in a curated list of stocks that balances performance and risk across clusters. Moreover, Industry information is added.
 
 ```python
 # Standardize the features data
