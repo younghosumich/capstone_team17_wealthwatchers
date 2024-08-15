@@ -2,7 +2,7 @@
 
 ## Overview
 
-This Jupyter notebook contains two sections. Stock selection and ..... 
+This Jupyter notebook contains two sections: Stock selection and Price Prediction 
 
 
 Requirements
