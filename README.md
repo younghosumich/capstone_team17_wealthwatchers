@@ -25,10 +25,11 @@ pip install -r requirements.txt
 ```
 
 # Executing the Program (Step by Step)
+**We strongly recommend using Google Colab when running the notebook and codes.**
+
 1. Run the Data exploration.ipynb to load and perform exploratory data analysis
 2. Run the Unsupervised Learning.ipynb to perform cluserting analysis and resulting in the stock selection.
 3. Run the Supervised_Learning.ipynb to perform LSTM model building and optimal portfolio construction.
-
 
 
 # Authors
